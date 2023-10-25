@@ -60,18 +60,28 @@ const getAlatBeratById = async (req, res, next) => {
 };
 
 const getAlatBeratList = async (req, res, next) => {
+  const { _nama_alat } = req.query;
   try {
-    const alatBeratList = await AlatBerat.getAlatBeratList(
-      null,
-      null,
-      null,
-      "SELECT"
-    );
-    res.status(200).json({
-      status: "Success",
-      data: alatBeratList,
-    });
-  } catch (error) {
+    if (_nama_alat) {
+      const alatBeratList = await AlatBerat.getAlatBeratList(_nama_alat);
+      res.status(200).json({
+        status: "Success",
+        data: {
+          alatBeratList,
+        },
+      });
+    } else if (!_nama_alat) {
+      const alatBeratList = await AlatBerat.getAlatBeratList();
+      res.status(200).json({
+        status: "Success",
+        data: {
+          alatBeratList,
+        },
+      });
+    } else {
+      next(new ApiError("Parameter yang diperlukan tidak ada", 400));
+    }
+  } catch (err) {
     next(new ApiError(err.message, 500));
   }
 };

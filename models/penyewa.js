@@ -18,9 +18,8 @@ const crudPenyewa = async function (
     );
     await connection.commit();
 
-    // Ambil hasil prosedur jika berhasil dan kembalikan nilainya
     if (rows && rows.length > 0) {
-      return rows[0]; // Atau sesuaikan dengan hasil yang kamu inginkan
+      return rows[0];
     } else {
       throw new Error(
         "Prosedur penyimpanan tidak mengembalikan hasil yang diharapkan"
@@ -53,10 +52,20 @@ const getPenyewaById = async function (_id) {
   }
 };
 
-const getPenyewaList = async function () {
+const getPenyewaList = async function (_nama_penyewa, _alamat_penyewa) {
   const connection = await mysql.createConnection(db);
   try {
-    const [rows] = await connection.execute("SELECT * FROM penyewa");
+    if (_nama_penyewa === undefined) {
+      _nama_penyewa = null;
+    }
+    if (_alamat_penyewa === undefined) {
+      _alamat_penyewa = null;
+    }
+
+    const [rows] = await connection.execute(
+      "CALL CheckPenyewaByNameOrAlamat(?,?)",
+      [_nama_penyewa, _alamat_penyewa]
+    );
     return rows;
   } catch (error) {
     throw error;

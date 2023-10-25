@@ -19,9 +19,8 @@ const crudService = async function (
     ]);
     await connection.commit();
 
-    // Ambil hasil prosedur jika berhasil dan kembalikan nilainya
     if (rows && rows.length > 0) {
-      return rows[0]; // Atau sesuaikan dengan hasil yang kamu inginkan
+      return rows[0];
     } else {
       throw new Error(
         "Prosedur penyimpanan tidak mengembalikan hasil yang diharapkan"

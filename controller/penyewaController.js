@@ -60,9 +60,57 @@ const getPenyewaById = async (req, res, next) => {
 };
 
 const getPenyewaList = async (req, res, next) => {
+  const { _nama_penyewa, _alamat_penyewa } = req.query;
   try {
-    const penyewaList = await Penyewa.getPenyewaList();
-    res.json(penyewaList);
+    if (_nama_penyewa && _alamat_penyewa) {
+      const penyewaList = await Penyewa.getPenyewaList(
+        _nama_penyewa,
+        _alamat_penyewa
+      );
+      res.status(200).json({
+        status: "Success",
+        data: {
+          penyewaList,
+        },
+      });
+    } else if (_nama_penyewa && _alamat_penyewa) {
+      const penyewaList = await Penyewa.getPenyewaList(
+        _nama_penyewa,
+        _alamat_penyewa
+      );
+      res.status(200).json({
+        status: "Success",
+        data: {
+          penyewaList,
+        },
+      });
+    } else if (_nama_penyewa) {
+      const penyewaList = await Penyewa.getPenyewaList(_nama_penyewa, null);
+      res.status(200).json({
+        status: "Success",
+        data: {
+          penyewaList,
+        },
+      });
+    } else if (_alamat_penyewa) {
+      const penyewaList = await Penyewa.getPenyewaList(null, _alamat_penyewa);
+      res.status(200).json({
+        status: "Success",
+        data: {
+          penyewaList,
+        },
+      });
+    } else if (!_nama_penyewa && !_alamat_penyewa) {
+      const penyewaList = await Penyewa.getPenyewaList();
+      res.status(200).json({
+        status: "Success",
+        data: {
+          penyewaList,
+        },
+      });
+    } else {
+      next(new ApiError("Parameter yang diperlukan tidak ada", 400));
+    }
   } catch (err) {
     next(new ApiError(err.message, 500));
   }
