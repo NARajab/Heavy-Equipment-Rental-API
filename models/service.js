@@ -53,10 +53,15 @@ const getServiceById = async function (_id) {
   }
 };
 
-const getServiceList = async function () {
+const getServiceList = async function (_kerusakan_alat) {
   const connection = await mysql.createConnection(db);
   try {
-    const [rows] = await connection.execute("SELECT * FROM service");
+    if (_kerusakan_alat === undefined) {
+      _kerusakan_alat = null;
+    }
+    const [rows] = await connection.execute("CALL CheckServiceByName(?)", [
+      _kerusakan_alat,
+    ]);
     return rows;
   } catch (error) {
     throw error;

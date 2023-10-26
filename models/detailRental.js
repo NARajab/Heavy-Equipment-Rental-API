@@ -66,10 +66,16 @@ const getDetailRentalById = async function (_id) {
   }
 };
 
-const getDetailRentalList = async function () {
+const getDetailRentalList = async function (_nama_penyewa) {
   const connection = await mysql.createConnection(db);
   try {
-    const [rows] = await connection.execute("SELECT * FROM detail_rental");
+    if (_nama_penyewa === undefined) {
+      _nama_penyewa = null;
+    }
+    const [rows] = await connection.execute(
+      "CALL CheckDetailRentalByNamePenyewa(?)",
+      [_nama_penyewa]
+    );
     return rows;
   } catch (error) {
     throw error;

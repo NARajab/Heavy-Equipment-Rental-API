@@ -87,14 +87,30 @@ const getDetailRentalById = async (req, res, next) => {
 };
 
 const getDetailRentalList = async (req, res, next) => {
+  const { _nama_penyewa } = req.query;
+  console.log(req.query);
   try {
-    const detailRentalList = await DetailRental.getDetailRentalList();
-    res.status(200).json({
-      status: "Success",
-      data: detailRentalList,
-    });
-  } catch (error) {
-    next(new ApiError(error.message, 500));
+    if (_nama_penyewa) {
+      const detailRentalList = await DetailRental.getDetailRentalList(
+        _nama_penyewa
+      );
+      res.status(200).json({
+        status: "Success",
+        data: {
+          detailRentalList,
+        },
+      });
+    } else {
+      const detailRentalList = await DetailRental.getDetailRentalList();
+      res.status(200).json({
+        status: "Success",
+        data: {
+          detailRentalList,
+        },
+      });
+    }
+  } catch (err) {
+    next(new ApiError(err.message, 500));
   }
 };
 
