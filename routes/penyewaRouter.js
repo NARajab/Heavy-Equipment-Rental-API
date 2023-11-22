@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const Penyewa = require("../controller/penyewaController");
+const Autentiaksi = require("../middleware/authenticate");
 
+router.use(Autentiaksi);
 router.get("/list", Penyewa.getPenyewaList);
 router.get("/list/:id", Penyewa.getPenyewaById);
 router.post("/create", Penyewa.cudPenyewa);
